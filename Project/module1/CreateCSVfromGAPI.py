@@ -34,7 +34,7 @@ def CreateCSVfile(nameInput):
 
     except pytrends.exceptions.TooManyRequestsError as e:
         print(f"Rate limit exceeded. Waiting before retrying...")
-        time.sleep(1)  # Wait for 60 seconds before retrying
+        time.sleep(0.1)  # Wait for 60 seconds before retrying
         CreateCSVfile(name)  # Retry the function call recursively
     except Exception as e:
         print(f"An error occurred: {str(e)}")
