@@ -2,15 +2,11 @@ from pytrends.request import TrendReq
 from utils.dataPath import SwitchCase
 import time
 from . import WriteDFtoSQL
-
-def test():
-    # Initialize pytrends request object
-    print("hello")
+from pytrends.exceptions import TooManyRequestsError
 
 def CreateCSVfile(nameInput):
     
-    name = nameInput
-
+    m_name = nameInput
     # Initialize pytrends request object
     pytrends = TrendReq(hl='ja-JP', tz=360)
     # Define the keywords to get trends for
@@ -18,32 +14,33 @@ def CreateCSVfile(nameInput):
     country_food_List = ["Vietnam food", "China food"]
     language_list = ['Python', 'JavaScript', 'Java']
     try:
-        if name == "country_food_filepath":
+        if m_name == "country_food":
             # Build the payload
             pytrends.build_payload(country_food_List, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
-        elif name == "vietnam_food_filepath":
+            # Get the interest over time for the keywords
+            interest_over_time_df = pytrends.interest_over_time()
+            WriteDFtoSQL.WriteDF_toSQL(interest_over_time_df,m_name)
+        elif m_name == "vietnam_food":
             pytrends.build_payload(vietname_food, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
-        elif name == "language":
+            # Get the interest over time for the keywords
+            interest_over_time_df = pytrends.interest_over_time()
+            WriteDFtoSQL.WriteDF_toSQL(interest_over_time_df,m_name)
+        elif m_name == "language":
             pytrends.build_payload(language_list, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
+            # Get the interest over time for the keywords
+            interest_over_time_df = pytrends.interest_over_time()
+            WriteDFtoSQL.WriteDF_toSQL(interest_over_time_df,m_name)
 
-        # Get the interest over time for the keywords
-        interest_over_time_df = pytrends.interest_over_time()
+        
 
         # Save the data to a CSV file
-        interest_over_time_df.to_csv(SwitchCase(name).filePath(), index=False)
-        print(f"Data saved to {SwitchCase(name).filePath()}")
+        #interest_over_time_df.to_csv(SwitchCase(m_name).filePath())
 
-    except pytrends.exceptions.TooManyRequestsError as e:
-        print(f"Rate limit exceeded. Waiting before retrying...")
-        time.sleep(0.1)  # Wait for 60 seconds before retrying
-        CreateCSVfile(name)  # Retry the function call recursively
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+    except TooManyRequestsError as e:
+        print(f"Too many requests error: {e}")
+        # Handle the exception (e.g., retry logic, wait and retry, etc.)
 
 
-    # Get the interest over time for the keywords
-    interest_over_time_df = pytrends.interest_over_time()
-    WriteDFtoSQL.WriteDF_toSQL(interest_over_time_df)
+    
 
-    # Save the data to a CSV file
-    interest_over_time_df.to_csv(SwitchCase(name).filePath())
+    

@@ -2,13 +2,12 @@ import pandas as pd
 import pyodbc
 from sqlalchemy import create_engine
 
-
-
-def WriteDF_toSQL(df):
+def WriteDF_toSQL(df,table):
     # Database connection details
     server = 'C116\\SQLEXPRESS'  # Replace with your SQL Server instance name
     database = 'master'  # Connect to the master database to create a new database
-    new_database = 'newDB'  # Name of the new database
+    new_database = "newDB"  # Name of the new database
+    new_tabel = table
     df = df
     # Step 1: Connect to SQL Server
     try:
@@ -34,7 +33,7 @@ def WriteDF_toSQL(df):
 
             # Write DataFrame to SQL Server
             try:
-                df.to_sql(name='People', con=engine, if_exists='replace', index=False)
+                df.to_sql(name=new_tabel, con=engine, if_exists='replace', index=False)
                 print("DataFrame successfully written to SQL Server!")
             except Exception as e:
                 print("Error writing DataFrame to SQL Server:", e)
