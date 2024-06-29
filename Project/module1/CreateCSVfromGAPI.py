@@ -1,7 +1,6 @@
 from pytrends.request import TrendReq
 from utils.dataPath import SwitchCase
 import time
-from . import WriteDFtoSQL
 
 def test():
     # Initialize pytrends request object
@@ -43,7 +42,7 @@ def CreateCSVfile(nameInput):
 
     # Get the interest over time for the keywords
     interest_over_time_df = pytrends.interest_over_time()
-    WriteDFtoSQL.WriteDF_toSQL(interest_over_time_df)
 
     # Save the data to a CSV file
     interest_over_time_df.to_csv(SwitchCase(name).filePath())
+    
