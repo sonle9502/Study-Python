@@ -1,8 +1,7 @@
-import pandas as pd
 import pyodbc
 from sqlalchemy import create_engine
 
-def WriteDF_toSQL(df,table):
+def writeDF_toSQL(df,table):
     # Database connection details
     server = 'C116\\SQLEXPRESS'  # Replace with your SQL Server instance name
     database = 'master'  # Connect to the master database to create a new database

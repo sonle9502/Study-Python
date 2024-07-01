@@ -1,11 +1,9 @@
-from module1 import SQLserver 
-from module1 import CreateCSVfromGAPI
-from utils.dataPath import SwitchCase
+from module1.HandleDataFromG import handlewithData
 
 def main():
-    CreateCSVfromGAPI.CreateCSVfile("country_food")
-    CreateCSVfromGAPI.CreateCSVfile("vietnam_food")
-    CreateCSVfromGAPI.CreateCSVfile("language")
+    handlewithData ("country_food")
+    handlewithData("vietnam_food")
+    handlewithData("language")
     
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())
