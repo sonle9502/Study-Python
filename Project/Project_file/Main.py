@@ -1,9 +1,12 @@
-from module1.HandleDataFromG import handlewithData
+from module1.C_DataFromG import DataFromG
 
 def main():
-    handlewithData ("country_food")
-    handlewithData("vietnam_food")
-    handlewithData("language")
+    data_handler = DataFromG()
+    data_handler.handlewithData("country_food")
+    data_handler.handlewithData("vietnam_food")
+    data_handler.handlewithData("language")
+
+
     
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())
