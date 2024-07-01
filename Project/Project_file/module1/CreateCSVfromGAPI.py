@@ -1,6 +1,4 @@
 from pytrends.request import TrendReq
-from utils.dataPath import SwitchCase
-import time
 from . import WriteDFtoSQL
 from pytrends.exceptions import TooManyRequestsError
 
