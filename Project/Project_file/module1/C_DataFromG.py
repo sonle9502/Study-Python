@@ -34,6 +34,7 @@ class DataFromG:
                 pytrends.build_payload(country_food_List, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
                 # Get the interest over time for the keywords
                 interest_over_time_df = pytrends.interest_over_time()
+                interest_over_time_df.reset_index(inplace=True)
                 return interest_over_time_df
 
             elif m_name == "vietnam_food":
@@ -41,6 +42,7 @@ class DataFromG:
                 pytrends.build_payload(vietname_food, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
                 # Get the interest over time for the keywords
                 interest_over_time_df = pytrends.interest_over_time()
+                interest_over_time_df.reset_index(inplace=True)
                 return interest_over_time_df
             
             elif m_name == "language":
@@ -48,6 +50,7 @@ class DataFromG:
                 pytrends.build_payload(language_list, cat=0, timeframe='2020-01-01 2024-06-01', geo='JP', gprop='')
                 # Get the interest over time for the keywords
                 interest_over_time_df = pytrends.interest_over_time()
+                interest_over_time_df.reset_index(inplace=True)
                 return interest_over_time_df
 
         except TooManyRequestsError as e:

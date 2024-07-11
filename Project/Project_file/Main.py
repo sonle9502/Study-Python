@@ -1,13 +1,18 @@
-from module1.C_DataFromG import DataFromG
+from module1 import C_DataFromG ,C_HandleDataFromSql 
 
+debug = 0
 def main():
-    data_handler = DataFromG()
-    data_handler.handlewithData("country_food")
-    data_handler.handlewithData("vietnam_food")
-    data_handler.handlewithData("language")
-
-
+    if debug == 1:
+        data_handler = C_DataFromG.DataFromG()
+        data_handler.handlewithData("country_food")
+        data_handler.handlewithData("vietnam_food")
+        data_handler.handlewithData("language")
     
+    createChart_handler =C_HandleDataFromSql.HandleDataFromSql()
+    
+    data = createChart_handler.get_data_from_sqlserver("language")
+    if data is not None:
+        createChart_handler.plot_data(data,"Vietnam food","China food","title2","X_asix","Y_asix")
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())
     # SQLserver.WriteToSQLserver(
