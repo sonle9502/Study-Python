@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class HandleDataFromSql:
     
     def get_data_from_sqlserver(self,name):

@@ -1,4 +1,5 @@
 from module1 import C_DataFromG ,C_HandleDataFromSql 
+from module2 import fetch_data
 
 debug = 0
 def main():
@@ -8,11 +9,16 @@ def main():
         data_handler.handlewithData("vietnam_food")
         data_handler.handlewithData("language")
     
-    createChart_handler =C_HandleDataFromSql.HandleDataFromSql()
+    if debug == 1:
+        createChart_handler =C_HandleDataFromSql.HandleDataFromSql()
+        data = createChart_handler.get_data_from_sqlserver("language")
+        if data is not None:
+            createChart_handler.plot_data(data,"Vietnam food","China food","title2","X_asix","Y_asix")
+
+    job_listings = fetch_data.fetch_job_listings('data scientist', 'New York', 1)
     
-    data = createChart_handler.get_data_from_sqlserver("language")
-    if data is not None:
-        createChart_handler.plot_data(data,"Vietnam food","China food","title2","X_asix","Y_asix")
+    print(job_listings)
+    
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())
     # SQLserver.WriteToSQLserver(

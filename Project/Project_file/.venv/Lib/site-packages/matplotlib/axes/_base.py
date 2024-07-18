@@ -597,7 +597,8 @@ class _AxesBase(martist.Artist):
 
         sharex, sharey : `~matplotlib.axes.Axes`, optional
             The x- or y-`~.matplotlib.axis` is shared with the x- or y-axis in
-            the input `~.axes.Axes`.
+            the input `~.axes.Axes`.  Note that it is not possible to unshare
+            axes.
 
         frameon : bool, default: True
             Whether the Axes frame is visible.
@@ -1221,7 +1222,7 @@ class _AxesBase(martist.Artist):
 
         This is equivalent to passing ``sharex=other`` when constructing the
         Axes, and cannot be used if the x-axis is already being shared with
-        another Axes.
+        another Axes.  Note that it is not possible to unshare axes.
         """
         _api.check_isinstance(_AxesBase, other=other)
         if self._sharex is not None and other is not self._sharex:
@@ -1240,7 +1241,7 @@ class _AxesBase(martist.Artist):
 
         This is equivalent to passing ``sharey=other`` when constructing the
         Axes, and cannot be used if the y-axis is already being shared with
-        another Axes.
+        another Axes.  Note that it is not possible to unshare axes.
         """
         _api.check_isinstance(_AxesBase, other=other)
         if self._sharey is not None and other is not self._sharey:
@@ -1881,6 +1882,11 @@ class _AxesBase(martist.Artist):
         Parameters
         ----------
         position : None or .Bbox
+
+            .. note::
+                This parameter exists for historic reasons and is considered
+                internal. End users should not use it.
+
             If not ``None``, this defines the position of the
             Axes within the figure as a Bbox. See `~.Axes.get_position`
             for further details.
@@ -1891,6 +1897,10 @@ class _AxesBase(martist.Artist):
         to call it yourself if you need to update the Axes position and/or
         view limits before the Figure is drawn.
 
+        An alternative with a broader scope is `.Figure.draw_without_rendering`,
+        which updates all stale components of a figure, not only the positioning /
+        view limits of a single Axes.
+
         See Also
         --------
         matplotlib.axes.Axes.set_aspect
@@ -1899,6 +1909,24 @@ class _AxesBase(martist.Artist):
             Set how the Axes adjusts to achieve the required aspect ratio.
         matplotlib.axes.Axes.set_anchor
             Set the position in case of extra space.
+        matplotlib.figure.Figure.draw_without_rendering
+            Update all stale components of a figure.
+
+        Examples
+        --------
+        A typical usage example would be the following. `~.Axes.imshow` sets the
+        aspect to 1, but adapting the Axes position and extent to reflect this is
+        deferred until rendering for performance reasons. If you want to know the
+        Axes size before, you need to call `.apply_aspect` to get the correct
+        values.
+
+        >>> fig, ax = plt.subplots()
+        >>> ax.imshow(np.zeros((3, 3)))
+        >>> ax.bbox.width, ax.bbox.height
+        (496.0, 369.59999999999997)
+        >>> ax.apply_aspect()
+        >>> ax.bbox.width, ax.bbox.height
+        (369.59999999999997, 369.59999999999997)
         """
         if position is None:
             position = self.get_position(original=True)
@@ -2941,9 +2969,15 @@ class _AxesBase(martist.Artist):
             # Index of largest element < x0 + tol, if any.
             i0 = stickies.searchsorted(x0 + tol) - 1
             x0bound = stickies[i0] if i0 != -1 else None
+            # Ensure the boundary acts only if the sticky is the extreme value
+            if x0bound is not None and x0bound > x0:
+                x0bound = None
             # Index of smallest element > x1 - tol, if any.
             i1 = stickies.searchsorted(x1 - tol)
             x1bound = stickies[i1] if i1 != len(stickies) else None
+            # Ensure the boundary acts only if the sticky is the extreme value
+            if x1bound is not None and x1bound < x1:
+                x1bound = None
 
             # Add the margin in figure space and then transform back, to handle
             # non-linear scales.
