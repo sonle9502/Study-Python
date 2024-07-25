@@ -1,6 +1,6 @@
 from module1 import C_DataFromG ,C_HandleDataFromSql 
 from module2 import fetch_data
-
+from module2 import fetch_data_fweb
 debug = 0
 def main():
     if debug == 1:
@@ -18,6 +18,8 @@ def main():
     job_listings = fetch_data.fetch_job_listings('data scientist', 'New York', 1)
     
     print(job_listings)
+
+    fetch_data_fweb.get_hmtlFileFromWeb()
     
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())

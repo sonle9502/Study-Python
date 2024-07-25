@@ -2,9 +2,9 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import os
 
-output_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\data'  # Windowsの場合
+output_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\datatest'  # Windowsの場合
 output_file = os.path.join(output_dir, 'output.csv')
-save_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\data'
+save_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\datatest'
 
 def create_list_element(cards, element ):
     m_list = []
@@ -106,13 +106,12 @@ def create_DF():
     return df
 
 df = pd.DataFrame(create_DF())
-# ディレクトリが存在しない場合は作成
-os.makedirs(output_dir, exist_ok=True)
-
 # データフレームを指定した場所にCSVファイルとして保存
 df.to_csv(output_file, index=False, encoding='utf-8-sig')
 
 
+# ディレクトリが存在しない場合は作成
+# os.makedirs(output_dir, exist_ok=True)
 # for card in cards:
 #     job_title_tag = card.find('h2', class_='jobTitle css-198pbd eu4oa1w0')
 #     if job_title_tag:
@@ -124,28 +123,18 @@ df.to_csv(output_file, index=False, encoding='utf-8-sig')
 #                 if job_title:
 #                     tile_list.append(job_title)
                 
-    # else:
-    #     tile_list.append(" ")
-        #tile_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+# else:
+#     tile_list.append(" ")
+    #tile_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
 
-    # company_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
-    # location_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+# company_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+# location_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
 
-    # m_company = card.find(class_ = 'css-63koeb eu4oa1w0').text.stsrip()
-    # m_location = card.find('span', attrs={'data-testid': 'myJobsStateDate'})
+# m_company = card.find(class_ = 'css-63koeb eu4oa1w0').text.stsrip()
+# m_location = card.find('span', attrs={'data-testid': 'myJobsStateDate'})
 
 # salary_list.append(card.find( class_='metadata salary-snippet-container css-5zy3wz eu4oa1w0'))
 #, 'Company': company_list, 'location' : location_list, 'salary' : salary_list
-
-
-
-
-
-
-
-
-
-
 # # 例として、すべての<h2>タグを選択して、そのテキストを出力する
 # for h2_tag in soup.find_all('h2'):
 #     print(h2_tag.text)
