@@ -5,13 +5,11 @@ import os
 output_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\data'  # Windowsの場合
 output_file = os.path.join(output_dir, 'output.csv')
 save_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\data'
-tile_list = []
-company_list = []
-location_list = []
-salary_list = []
-def create_list_element(card, element ):
+
+def create_list_element(cards, element ):
     m_list = []
     element = element
+    cards = cards
     if element == 'title':
         for card in cards:
             job_title_tag = card.find('div', class_='css-dekpa e37uo190')
@@ -84,57 +82,64 @@ def create_list_element(card, element ):
                 m_list.append(" ")
         return m_list
     
+def create_DF():
+    tile_list = []
+    company_list = []
+    location_list = []
+    salary_list = []
+    for i in range(1,57):
+        file_path = os.path.join(save_dir, f'output_page_{i}.html')
 
-for i in range(1,61):
-    file_path = os.path.join(save_dir, f'output_page_{i}.html')
+        # HTMLファイルを読み込む
+        with open(file_path, 'r', encoding='utf-8') as file:
+            html_content = file.read()
 
-    # HTMLファイルを読み込む
-    with open(file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
+        # BeautifulSoupオブジェクトを作成
+        soup = BeautifulSoup(html_content, 'lxml')
 
-    # BeautifulSoupオブジェクトを作成
-    soup = BeautifulSoup(html_content, 'lxml')
+        cards = soup.find_all('td', class_='resultContent css-1qwrrf0 eu4oa1w0')
+        tile_list.extend(create_list_element(cards,'title'))
+        company_list.extend(create_list_element(cards, 'company'))
+        location_list.extend(create_list_element(cards, 'location'))
+        salary_list.extend(create_list_element(cards, 'salary'))
+        df = { 'Title': tile_list, 'Company': company_list, 'Location': location_list, 'Salary': salary_list}
+    return df
 
-    cards = soup.find_all('td', class_='resultContent css-1qwrrf0 eu4oa1w0')
-    tile_list.extend(create_list_element(cards,'title'))
-    company_list.extend(create_list_element(cards, 'company'))
-    location_list.extend(create_list_element(cards, 'location'))
-    salary_list.extend(create_list_element(cards, 'salary'))
-
-    
-
-    # for card in cards:
-    #     job_title_tag = card.find('h2', class_='jobTitle css-198pbd eu4oa1w0')
-    #     if job_title_tag:
-    #         a_tag = job_title_tag.find('a')
-    #         if a_tag:
-    #             span_tag = a_tag.find('span')
-    #             if span_tag:
-    #                 job_title = span_tag.get_text(strip=True)
-    #                 if job_title:
-    #                     tile_list.append(job_title)
-                    
-        # else:
-        #     tile_list.append(" ")
-            #tile_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
-
-        # company_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
-        # location_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
-
-        # m_company = card.find(class_ = 'css-63koeb eu4oa1w0').text.stsrip()
-        # m_location = card.find('span', attrs={'data-testid': 'myJobsStateDate'})
-
-    # salary_list.append(card.find( class_='metadata salary-snippet-container css-5zy3wz eu4oa1w0'))
-    #, 'Company': company_list, 'location' : location_list, 'salary' : salary_list
-data = { 'Title': tile_list, 'Company': company_list, 'Location': location_list, 'Salary': salary_list}
-df = pd.DataFrame(data)
-
-
+df = pd.DataFrame(create_DF())
 # ディレクトリが存在しない場合は作成
 os.makedirs(output_dir, exist_ok=True)
 
 # データフレームを指定した場所にCSVファイルとして保存
 df.to_csv(output_file, index=False, encoding='utf-8-sig')
+
+
+# for card in cards:
+#     job_title_tag = card.find('h2', class_='jobTitle css-198pbd eu4oa1w0')
+#     if job_title_tag:
+#         a_tag = job_title_tag.find('a')
+#         if a_tag:
+#             span_tag = a_tag.find('span')
+#             if span_tag:
+#                 job_title = span_tag.get_text(strip=True)
+#                 if job_title:
+#                     tile_list.append(job_title)
+                
+    # else:
+    #     tile_list.append(" ")
+        #tile_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+
+    # company_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+    # location_list.append(card.find('h2', class_='jobTitle css-198pbd eu4oa1w0').find('a').find('span').get_text(strip=True))
+
+    # m_company = card.find(class_ = 'css-63koeb eu4oa1w0').text.stsrip()
+    # m_location = card.find('span', attrs={'data-testid': 'myJobsStateDate'})
+
+# salary_list.append(card.find( class_='metadata salary-snippet-container css-5zy3wz eu4oa1w0'))
+#, 'Company': company_list, 'location' : location_list, 'salary' : salary_list
+
+
+
+
 
 
 
