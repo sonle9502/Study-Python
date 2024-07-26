@@ -1,17 +1,37 @@
 # # utils/dataPath.py
-# import os
+import os
 
-# class SwitchCase:
-#     def __init__(self, name):
-#         self.name = name
+data_root = f'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\datatest'
+def create_filepath(position, page_number):
+    # 正しいパス結合方法を使用 
+    base_dir = os.path.join(data_root, position)
+    # フォルダーの存在を確認し、存在しない場合は作成
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+        print(f"{base_dir} フォルダーを作成しました。")
+    else:
+        print(f"{base_dir} フォルダーは既に存在します。")
+    file_path = os.path.join(base_dir, f'output_{page_number}.html')
+    return file_path
 
-#     def filePath(self):
-#         root = "C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\data"
-#         if self.name == "country_food_filepath":
-#             return  os.path.join(root,"datacountry_food_overTime_df.csv")
-#         elif self.name == "vietnam_food_filepath":
-#             return os.path.join(root,"vietnam_food_filepath.csv") 
-#         elif self.name == "language":
-#             return os.path.join(root,"language.csv") 
-#         # else:
-#         #     return "C:/path/to/daughter_file.csv"
+def create_folderpath(position):
+    # 正しいパス結合方法を使用 
+    folderpath = os.path.join(data_root, position)
+    # フォルダーの存在を確認し、存在しない場合は作成
+    if not os.path.exists(folderpath):
+        os.makedirs(folderpath)
+        print(f"{folderpath} フォルダーを作成しました。")
+    else:
+        print(f"{folderpath} フォルダーは既に存在します。")
+    return folderpath
+
+def count_files_in_folder(position):
+    folder_path = create_folderpath(position)
+    # フォルダーの存在を確認
+    if not os.path.exists(folder_path):
+        print(f"{folder_path} フォルダーが存在しません。")
+        return 0
+
+    # フォルダー内のファイル数をカウント
+    file_count = len([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))])
+    return file_count

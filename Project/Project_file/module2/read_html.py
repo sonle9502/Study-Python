@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
+from utils import dataPath
 
 output_dir = 'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\datatest'  # Windowsの場合
 output_file = os.path.join(output_dir, 'output.csv')
@@ -81,14 +82,17 @@ def create_list_element(cards, element ):
             else:
                 m_list.append(" ")
         return m_list
+
+
     
-def create_DF():
+def create_DF(position):
     tile_list = []
     company_list = []
     location_list = []
     salary_list = []
-    for i in range(1,57):
-        file_path = os.path.join(save_dir, f'output_page_{i}.html')
+    size = dataPath.count_files_in_folder(position)
+    for i in range(1,size):
+        file_path = dataPath.create_filepath(position,i)
 
         # HTMLファイルを読み込む
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -102,12 +106,15 @@ def create_DF():
         company_list.extend(create_list_element(cards, 'company'))
         location_list.extend(create_list_element(cards, 'location'))
         salary_list.extend(create_list_element(cards, 'salary'))
-        df = { 'Title': tile_list, 'Company': company_list, 'Location': location_list, 'Salary': salary_list}
-    return df
+    df = { 'Title': tile_list, 'Company': company_list, 'Location': location_list, 'Salary': salary_list}
+    df = pd.DataFrame(df)
 
-df = pd.DataFrame(create_DF())
-# データフレームを指定した場所にCSVファイルとして保存
-df.to_csv(output_file, index=False, encoding='utf-8-sig')
+    output_csv_folderpath = dataPath.create_folderpath(position)
+    output_csv_filepath = os.path.join(output_csv_folderpath,"output.csv")
+    # データフレームを指定した場所にCSVファイルとして保存
+    df.to_csv(output_csv_filepath, index=False, encoding='utf-8-sig')
+
+
 
 
 # ディレクトリが存在しない場合は作成

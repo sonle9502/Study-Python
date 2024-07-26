@@ -1,6 +1,7 @@
 from module1 import C_DataFromG ,C_HandleDataFromSql 
-from module2 import fetch_data
-from module2 import fetch_data_fweb
+from utils import dataPath
+from module2 import fetch_data_fweb , read_html
+
 debug = 0
 def main():
     if debug == 1:
@@ -15,11 +16,12 @@ def main():
         if data is not None:
             createChart_handler.plot_data(data,"Vietnam food","China food","title2","X_asix","Y_asix")
 
-    job_listings = fetch_data.fetch_job_listings('data scientist', 'New York', 1)
-    
-    print(job_listings)
+    handle = C_HandleDataFromSql.HandleDataFromSql()
+    handle.write_df_to_sqlserver()
 
-    fetch_data_fweb.get_hmtlFileFromWeb()
+    #fetch_data_fweb.get_htmlFileFromWeb(position = "データ分析", location = "")
+    #read_html.create_DF(position = "データ分析")
+    
     
     # SQLserver.WriteToSQLserver(
     #     serverName = 'C116\SQLEXPRESS',DBname ='TestDB',TBname = 'TableTest',dataPath = SwitchCase("country_food_filepath").filePath())
