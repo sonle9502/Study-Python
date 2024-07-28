@@ -1,0 +1,10 @@
+{
+    "language": "python",
+    "build": {
+      "cmd": "pip install -r moduleFlask/requirements.txt"
+    },
+    "start": {
+      "cmd": "gunicorn moduleFlask.app:app"
+    }
+  }
+  
