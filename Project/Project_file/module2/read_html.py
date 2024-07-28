@@ -83,7 +83,6 @@ def create_list_element(cards, element ):
                 m_list.append(" ")
         return m_list
 
-
     
 def create_DF(position):
     tile_list = []
@@ -92,7 +91,7 @@ def create_DF(position):
     salary_list = []
     size = dataPath.count_files_in_folder(position)
     for i in range(1,size):
-        file_path = dataPath.create_filepath(position,i)
+        file_path = dataPath.create_filepath(position,name = f'output_{i}.html')
 
         # HTMLファイルを読み込む
         with open(file_path, 'r', encoding='utf-8') as file:

@@ -1,6 +1,9 @@
 from module1 import C_DataFromG ,C_HandleDataFromSql 
 from utils import dataPath
 from module2 import fetch_data_fweb , read_html
+import pandas as pd
+import os
+from moduleFlask import app
 
 debug = 0
 def main():
@@ -16,11 +19,28 @@ def main():
         if data is not None:
             createChart_handler.plot_data(data,"Vietnam food","China food","title2","X_asix","Y_asix")
 
+    # folderpath = dataPath.create_folderpath("データアナリスト" )
+    # filepath = os.path.join(folderpath,"output.csv")
+    # Database connection details
+
+
+    database = "indeedDB"
+    table = "indeedTB"
+    query = f'SELECT * FROM {database}.dbo.{table}'  # Correct SQL syntax
+    """
+    Retrieves data from SQL Server based on the provided query.
+    """
     handle = C_HandleDataFromSql.HandleDataFromSql()
-    handle.write_df_to_sqlserver()
+    df = handle.get_data_from_sqlserver(server = 'C116\\SQLEXPRESS',database ='newDB',query=query)
+    app.flask_app()
+
+    # handle.write_df_to_sqlserver(
+    #     server = 'C116\\SQLEXPRESS',database_master = 'master',
+    #     new_database = "indeedDB",new_table = 'indeedTB',df = pd.read_csv(filepath))
 
     #fetch_data_fweb.get_htmlFileFromWeb(position = "データ分析", location = "")
-    #read_html.create_DF(position = "データ分析")
+    #read_html.create_DF(position = "データアナリスト")
+    
     
     
     # SQLserver.WriteToSQLserver(

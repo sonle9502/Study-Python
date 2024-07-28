@@ -2,7 +2,7 @@
 import os
 
 data_root = f'C:\\Users\\s-le\\Desktop\\study-private\\Python\\Study-Python\\Project\\Project_file\\datatest'
-def create_filepath(position, page_number):
+def create_filepath(position, name):
     # 正しいパス結合方法を使用 
     base_dir = os.path.join(data_root, position)
     # フォルダーの存在を確認し、存在しない場合は作成
@@ -11,7 +11,7 @@ def create_filepath(position, page_number):
         print(f"{base_dir} フォルダーを作成しました。")
     else:
         print(f"{base_dir} フォルダーは既に存在します。")
-    file_path = os.path.join(base_dir, f'output_{page_number}.html')
+    file_path = os.path.join(base_dir, name)
     return file_path
 
 def create_folderpath(position):

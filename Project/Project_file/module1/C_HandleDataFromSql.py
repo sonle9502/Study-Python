@@ -7,16 +7,7 @@ import os
 import pyodbc
 
 class HandleDataFromSql:
-    def write_df_to_sqlserver(self):
-        folderpath = dataPath.create_folderpath("データアナリスト" )
-        filepath = os.path.join(folderpath,"output.csv")
-        df = pd.read_csv(filepath)
-        # Database connection details
-        server = 'C116\\SQLEXPRESS'  # Replace with your SQL Server instance name
-        database_master = 'master'  # Connect to the master database to create a new database
-        new_database = "indeeddataanalytist"  # Name of the new database
-        new_tabel = 'newDB'
-        df = df
+    def write_df_to_sqlserver(self,server, database_master, new_database, new_table,df):
         # Step 1: Connect to SQL Server
         try:
             conn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database_master + ';Trusted_Connection=yes;')
@@ -41,7 +32,7 @@ class HandleDataFromSql:
 
                 # Write DataFrame to SQL Server
                 try:
-                    df.to_sql(name=new_tabel, con=engine, if_exists='replace', index=False)
+                    df.to_sql(name=new_table, con=engine, if_exists='replace', index=False)
                     print("DataFrame successfully written to SQL Server!")
                 except Exception as e:
                     print("Error writing DataFrame to SQL Server:", e)
@@ -51,15 +42,8 @@ class HandleDataFromSql:
         except pyodbc.Error as ex:
             print("Error connecting to SQL Server:", ex)
 
-    def get_data_from_sqlserver(self,name):
-        # Database connection details
-        server = 'C116\\SQLEXPRESS'
-        database = 'newDB'
-        table = name  # Replace with your actual table name
-        query = f'SELECT * FROM {database}.dbo.{table}'  # Correct SQL syntax
-        """
-        Retrieves data from SQL Server based on the provided query.
-        """
+    def get_data_from_sqlserver(self,server,database,query):
+        
         conn_str = f'mssql+pyodbc://{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes'
         engine = create_engine(conn_str)
 
