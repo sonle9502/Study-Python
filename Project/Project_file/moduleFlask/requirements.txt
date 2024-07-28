@@ -1,0 +1,4 @@
+Flask==2.0.2
+gunicorn==20.1.0
+SQLAlchemy==1.4.23
+pyodbc==4.0.32
